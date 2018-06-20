@@ -4,4 +4,23 @@ class Rental
   def initialize(movie, days_rented)
     @movie, @days_rented = movie, days_rented
   end
+
+  def charge
+    result = 0
+    case movie.price_code
+    when Movie::REGULAR
+      result += 2
+      result += (rental.days_rented - 2) * 1.5 if rental.days_rented > 2
+    when Movie::NEW_RELEASE
+      result += rental.days_rented * 3
+    when Movie::CHILDRENS
+      result += 1.5
+      result += (rental.days_rented - 3) * 1.5 if rental.days_rented > 3
+    end
+    result
+  end
+
+  def frequent_renter_points
+    (movie.price_code == Movie::NEW_RELEASE && days_rented > 1) ? 2 : 1
+  end
 end
